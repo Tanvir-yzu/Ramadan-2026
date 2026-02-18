@@ -352,6 +352,7 @@
                             <p class="text-gray-400 text-sm uppercase tracking-wider mb-1">Iftar (Maghrib)</p>
                             <p id="today-iftar" class="text-4xl font-bold text-gold mb-2">--:--</p>
                             <p class="text-xs text-gray-500">Break your fast</p>
+                            <p class="text-xs text-gray-400 mt-2">Countdown: <span id="iftar-countdown" class="text-gold-light font-medium">--h --m --s</span></p>
                         </div>
                     </div>
 
@@ -538,9 +539,38 @@
             if (period === 'PM' && hours !== 12) hour += 12;
             if (period === 'AM' && hours === 12) hour = 0;
             
-            const date = new Date(dateStr);
+            const date = parseDateKey(dateStr);
             date.setHours(hour, minutes, 0);
             return date;
+        }
+
+        function formatCompactCountdown(diff) {
+            const totalSeconds = Math.max(0, Math.floor(diff / 1000));
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
+        }
+
+        function updateIftarCountdown(now, todayData, isBeforeRamadan = false) {
+            const iftarCountdown = document.getElementById('iftar-countdown');
+            if (!iftarCountdown) return;
+
+            if (isBeforeRamadan) {
+                const firstIftar = parseTime(ramadanData[0].date, ramadanData[0].iftar);
+                const diff = firstIftar - now;
+                iftarCountdown.textContent = diff > 0 ? formatCompactCountdown(diff) : '--h --m --s';
+                return;
+            }
+
+            if (!todayData || todayData.iftar === '-') {
+                iftarCountdown.textContent = '--h --m --s';
+                return;
+            }
+
+            const iftarTime = parseTime(todayData.date, todayData.iftar);
+            const diff = iftarTime - now;
+            iftarCountdown.textContent = diff > 0 ? formatCompactCountdown(diff) : '00h 00m 00s';
         }
 
         // Calculate duration between two times
@@ -602,6 +632,7 @@
                     document.getElementById('countdown-label').textContent = 'Until Ramadan Begins';
                     document.getElementById('fasting-status').textContent = 'Ramadan has not started yet';
                 }
+                updateIftarCountdown(now, ramadanData[0], true);
                 return;
             }
 
@@ -663,6 +694,7 @@
             }
             
             document.getElementById('ramadan-day').textContent = `Day ${todayData.day} of 30`;
+            updateIftarCountdown(now, todayData);
         }
 
         function updateCountdownDisplay(diff) {
