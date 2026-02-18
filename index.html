@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramadan 2026 - Yangzhou Timetable</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        arabic: ['Noto Naskh Arabic', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        midnight: '#0f172a',
+                        sand: '#f5f5dc',
+                        gold: '#d4af37',
+                        'gold-light': '#f4e4c1',
+                        'deep-blue': '#1e293b',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(212, 175, 55, 0.3)' },
+                            '100%': { boxShadow: '0 0 40px rgba(212, 175, 55, 0.6)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .moon-glow {
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.3);
+        }
+        .geometric-pattern {
+            background-image: radial-gradient(circle at 1px 1px, rgba(212, 175, 55, 0.15) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+        .today-highlight {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+        .countdown-box {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
+        }
+        .clock-glow {
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f4e4c1;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        .live-indicator {
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="bg-midnight text-white min-h-screen geometric-pattern overflow-x-hidden">
+
+    <!-- Animated Stars Background -->
+    <div id="stars-container" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-yellow-600 flex items-center justify-center moon-glow">
+                        <svg class="w-6 h-6 text-midnight" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                        </svg>
+                    </div>
+                    <span class="font-arabic text-xl font-semibold text-gold">رمضان</span>
+                    <span class="text-lg font-medium tracking-wide">Ramadan 2026</span>
+                </div>
+                <div class="hidden md:flex items-center gap-6 text-sm text-gray-300">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Yangzhou, China
+                    </span>
+                    <span id="current-date" class="text-gold-light"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Current Time & Countdown -->
+    <section class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 z-10">
+        <div class="max-w-5xl mx-auto text-center">
+            
+            <!-- Current Time Display -->
+            <div class="mb-8 relative inline-block">
+                <div class="absolute -inset-1 bg-gradient-to-r from-gold to-yellow-600 rounded-2xl blur opacity-25 animate-pulse"></div>
+                <div class="relative glass-card rounded-2xl px-8 py-6 border border-gold/30">
+                    <div class="flex items-center justify-center gap-3 mb-2">
+                        <span class="live-indicator w-2 h-2 bg-red-500 rounded-full"></span>
+                        <span class="text-xs uppercase tracking-widest text-gray-400">Current Local Time</span>
+                    </div>
+                    <div id="current-time" class="text-6xl md:text-8xl font-mono font-bold text-white clock-glow tracking-wider">
+                        00:00:00
+                    </div>
+                    <div id="current-date-hero" class="text-gold-light text-lg mt-2 font-medium">
+                        Loading...
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8 inline-block animate-float">
+                <svg class="w-20 h-20 mx-auto text-gold moon-glow rounded-full" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                </svg>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 font-arabic text-gradient leading-tight">
+                Ramadan Mubarak
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-12 font-light">
+                Yangzhou 2026 . February 18 - March 20
+            </p>
+
+            <!-- Live Countdown -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-12">
+                <div class="countdown-box rounded-2xl p-6 border border-gold/20">
+                    <div id="days" class="text-4xl md:text-5xl font-bold text-gold mb-2">00</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wider">Days</div>
+                </div>
+                <div class="countdown-box rounded-2xl p-6 border border-gold/20">
+                    <div id="hours" class="text-4xl md:text-5xl font-bold text-gold mb-2">00</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wider">Hours</div>
+                </div>
+                <div class="countdown-box rounded-2xl p-6 border border-gold/20">
+                    <div id="minutes" class="text-4xl md:text-5xl font-bold text-gold mb-2">00</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wider">Minutes</div>
+                </div>
+                <div class="countdown-box rounded-2xl p-6 border border-gold/20">
+                    <div id="seconds" class="text-4xl md:text-5xl font-bold text-gold mb-2">00</div>
+                    <div class="text-sm text-gray-400 uppercase tracking-wider">Seconds</div>
+                </div>
+            </div>
+
+            <div id="countdown-label" class="text-gold-light text-lg font-medium mb-8">
+                Until Iftar Today
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="flex flex-wrap justify-center gap-6 text-sm">
+                <div class="glass px-6 py-3 rounded-full flex items-center gap-2">
+                    <span class="w-2 h-2 bg-gold rounded-full animate-pulse"></span>
+                    <span id="fasting-status">Checking fasting status...</span>
+                </div>
+                <div class="glass px-6 py-3 rounded-full">
+                    <span class="text-gray-400">Current Phase:</span>
+                    <span id="ramadan-day" class="text-gold ml-2">Day 1 of 30</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Today's Times Highlight -->
+    <section class="px-4 sm:px-6 lg:px-8 mb-16 z-10 relative">
+        <div class="max-w-4xl mx-auto">
+            <div class="today-highlight rounded-3xl p-8 md:p-12 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                <div class="relative z-10">
+                    <div class="text-center mb-8">
+                        <h2 class="text-2xl font-arabic text-gold mb-2">اليوم</h2>
+                        <p class="text-3xl font-bold text-white">Today's Times</p>
+                        <p id="today-date-display" class="text-gray-400 mt-2"></p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="glass-card rounded-2xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-900 to-midnight border border-blue-500/30 flex items-center justify-center">
+                                <svg class="w-8 h-8 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-400 text-sm uppercase tracking-wider mb-1">Sehri Ends (Imsak)</p>
+                            <p id="today-sehri" class="text-4xl font-bold text-white mb-2">--:--</p>
+                            <p class="text-xs text-gray-500">Stop eating & drinking</p>
+                        </div>
+
+                        <div class="glass-card rounded-2xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-orange-900 to-midnight border border-orange-500/30 flex items-center justify-center">
+                                <svg class="w-8 h-8 text-orange-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-400 text-sm uppercase tracking-wider mb-1">Iftar (Maghrib)</p>
+                            <p id="today-iftar" class="text-4xl font-bold text-gold mb-2">--:--</p>
+                            <p class="text-xs text-gray-500">Break your fast</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <div class="inline-flex items-center gap-4 glass px-6 py-3 rounded-full flex-wrap justify-center">
+                            <span class="text-gray-400">Fajr Begins:</span>
+                            <span id="today-fajr" class="text-xl font-semibold text-white">--:--</span>
+                            <span class="w-px h-4 bg-gray-600 hidden sm:block"></span>
+                            <span class="text-gray-400">Fasting Duration:</span>
+                            <span id="fasting-duration" class="text-xl font-semibold text-gold">--h --m</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full Timetable -->
+    <section class="px-4 sm:px-6 lg:px-8 pb-20 z-10 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+                <div>
+                    <h2 class="text-3xl font-bold text-white mb-2">Complete Timetable</h2>
+                    <p class="text-gray-400">Yangzhou Ramadan 2026 Schedule</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="filterDays('all')" class="filter-btn active px-4 py-2 rounded-full text-sm font-medium transition-all bg-gold text-midnight" data-filter="all">
+                        All Days
+                    </button>
+                    <button onclick="filterDays('past')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all glass text-gray-300 hover:text-white" data-filter="past">
+                        Past
+                    </button>
+                    <button onclick="filterDays('upcoming')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all glass text-gray-300 hover:text-white" data-filter="upcoming">
+                        Upcoming
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass rounded-2xl overflow-hidden border border-white/10">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-white/10 bg-white/5">
+                                <th class="px-6 py-4 text-gold font-semibold text-sm uppercase tracking-wider">Day</th>
+                                <th class="px-6 py-4 text-gold font-semibold text-sm uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-4 text-gold font-semibold text-sm uppercase tracking-wider text-center">Sehri (Imsak)</th>
+                                <th class="px-6 py-4 text-gold font-semibold text-sm uppercase tracking-wider text-center">Fajr Begins</th>
+                                <th class="px-6 py-4 text-gold font-semibold text-sm uppercase tracking-wider text-center">Iftar (Maghrib)</th>
+                                <th class="px-6 py-4 text-gold font-semibold text-sm uppercase tracking-wider text-center">Duration</th>
+                                <th class="px-6 py-4 text-gold font-semibold text-sm uppercase tracking-wider text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timetable-body" class="divide-y divide-white/5">
+                            <!-- Generated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mt-8 glass rounded-2xl p-6 border border-white/10">
+                <div class="flex justify-between text-sm mb-2">
+                    <span class="text-gray-400">Ramadan Progress</span>
+                    <span id="progress-text" class="text-gold">0%</span>
+                </div>
+                <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
+                    <div id="progress-bar" class="bg-gradient-to-r from-gold to-yellow-600 h-full rounded-full transition-all duration-1000" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-2">
+                    <span>Start: Feb 18</span>
+                    <span>Eid: Mar 20</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 py-12 px-4 sm:px-6 lg:px-8 bg-midnight/50">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="flex justify-center items-center gap-2 mb-4">
+                <span class="text-2xl font-arabic text-gold">رمضان كريم</span>
+            </div>
+            <p class="text-gray-400 text-sm mb-4">May this Ramadan bring peace, blessings, and spiritual growth.</p>
+            <p class="text-gray-600 text-xs">
+                Timetable calculated for Yangzhou, China (2026) â¢ Times may vary slightly based on local moon sighting
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Ramadan 2026 Data for Yangzhou
+        const ramadanData = [
+            { date: '2026-02-19', day: 1, sehri: '5:16 AM', fajr: '6:01 AM', iftar: '5:54 PM' },
+            { date: '2026-02-20', day: 2, sehri: '5:16 AM', fajr: '6:01 AM', iftar: '5:54 PM' },
+            { date: '2026-02-21', day: 3, sehri: '5:10 AM', fajr: '5:55 AM', iftar: '5:57 PM' },
+            { date: '2026-02-22', day: 4, sehri: '5:10 AM', fajr: '5:55 AM', iftar: '5:57 PM' },
+            { date: '2026-02-23', day: 5, sehri: '5:10 AM', fajr: '5:55 AM', iftar: '5:57 PM' },
+            { date: '2026-02-24', day: 6, sehri: '5:10 AM', fajr: '5:55 AM', iftar: '5:57 PM' },
+            { date: '2026-02-25', day: 7, sehri: '5:10 AM', fajr: '5:55 AM', iftar: '5:57 PM' },
+            { date: '2026-02-26', day: 8, sehri: '5:05 AM', fajr: '5:50 AM', iftar: '6:00 PM' },
+            { date: '2026-02-27', day: 9, sehri: '5:05 AM', fajr: '5:50 AM', iftar: '6:00 PM' },
+            { date: '2026-02-28', day: 10, sehri: '5:05 AM', fajr: '5:50 AM', iftar: '6:00 PM' },
+            { date: '2026-03-01', day: 11, sehri: '5:00 AM', fajr: '5:45 AM', iftar: '6:04 PM' },
+            { date: '2026-03-02', day: 12, sehri: '5:00 AM', fajr: '5:45 AM', iftar: '6:04 PM' },
+            { date: '2026-03-03', day: 13, sehri: '5:00 AM', fajr: '5:45 AM', iftar: '6:04 PM' },
+            { date: '2026-03-04', day: 14, sehri: '5:00 AM', fajr: '5:45 AM', iftar: '6:04 PM' },
+            { date: '2026-03-05', day: 15, sehri: '5:00 AM', fajr: '5:45 AM', iftar: '6:04 PM' },
+            { date: '2026-03-06', day: 16, sehri: '4:54 AM', fajr: '5:39 AM', iftar: '6:08 PM' },
+            { date: '2026-03-07', day: 17, sehri: '4:54 AM', fajr: '5:39 AM', iftar: '6:08 PM' },
+            { date: '2026-03-08', day: 18, sehri: '4:54 AM', fajr: '5:39 AM', iftar: '6:08 PM' },
+            { date: '2026-03-09', day: 19, sehri: '4:54 AM', fajr: '5:39 AM', iftar: '6:08 PM' },
+            { date: '2026-03-10', day: 20, sehri: '4:54 AM', fajr: '5:39 AM', iftar: '6:08 PM' },
+            { date: '2026-03-11', day: 21, sehri: '4:48 AM', fajr: '5:33 AM', iftar: '6:11 PM' },
+            { date: '2026-03-12', day: 22, sehri: '4:48 AM', fajr: '5:33 AM', iftar: '6:11 PM' },
+            { date: '2026-03-13', day: 23, sehri: '4:48 AM', fajr: '5:33 AM', iftar: '6:11 PM' },
+            { date: '2026-03-14', day: 24, sehri: '4:48 AM', fajr: '5:33 AM', iftar: '6:11 PM' },
+            { date: '2026-03-15', day: 25, sehri: '4:48 AM', fajr: '5:33 AM', iftar: '6:11 PM' },
+            { date: '2026-03-16', day: 26, sehri: '4:42 AM', fajr: '5:27 AM', iftar: '6:15 PM' },
+            { date: '2026-03-17', day: 27, sehri: '4:42 AM', fajr: '5:27 AM', iftar: '6:15 PM' },
+            { date: '2026-03-18', day: 28, sehri: '4:42 AM', fajr: '5:27 AM', iftar: '6:15 PM' },
+            { date: '2026-03-19', day: 39, sehri: '4:42 AM', fajr: '5:27 AM', iftar: '6:15 PM' },
+            { date: '2026-03-20', day: 30, sehri: '4:42 AM', fajr: '5:27 AM', iftar: '6:15 PM' },
+        ];
+
+        // Create stars background
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(star);
+            }
+        }
+
+        // Update current time
+        function updateCurrentTime() {
+            const now = new Date();
+            
+            // Format time: HH:MM:SS
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // Format date
+            const dateOptions = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            document.getElementById('current-date-hero').textContent = now.toLocaleDateString('en-US', dateOptions);
+            
+            // Update nav date
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', { 
+                weekday: 'short', month: 'short', day: 'numeric' 
+            });
+        }
+
+        // Parse time string to Date object
+        function parseTime(dateStr, timeStr) {
+            if (timeStr === '-') return null;
+            const [time, period] = timeStr.split(' ');
+            const [hours, minutes] = time.split(':').map(Number);
+            let hour = hours;
+            if (period === 'PM' && hours !== 12) hour += 12;
+            if (period === 'AM' && hours === 12) hour = 0;
+            
+            const date = new Date(dateStr);
+            date.setHours(hour, minutes, 0);
+            return date;
+        }
+
+        // Calculate duration between two times
+        function calculateDuration(startTime, endTime) {
+            if (!startTime || !endTime) return '--';
+            let diff = endTime - startTime;
+            if (diff < 0) diff += 24 * 60 * 60 * 1000; // Add day if overnight
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            return `${hours}h ${minutes}m`;
+        }
+
+        // Get current Ramadan day info
+        function getCurrentRamadanInfo() {
+            const now = new Date();
+            const currentDate = now.toISOString().split('T')[0];
+            
+            // Find today's data or nearest day
+            let todayData = ramadanData.find(d => d.date === currentDate);
+            let dayIndex = ramadanData.findIndex(d => d.date === currentDate);
+            
+            if (!todayData) {
+                // Find nearest upcoming day
+                dayIndex = ramadanData.findIndex(d => new Date(d.date) > now);
+                if (dayIndex === -1) dayIndex = ramadanData.length - 1;
+                if (dayIndex === 0 && new Date(ramadanData[0].date) > now) {
+                    // Before Ramadan starts
+                    return { 
+                        status: 'upcoming', 
+                        data: ramadanData[0], 
+                        dayIndex: 0,
+                        isBefore: true 
+                    };
+                }
+                todayData = ramadanData[dayIndex];
+            }
+            
+            const isPast = new Date(todayData.date) < new Date(currentDate);
+            return { 
+                status: isPast ? 'past' : (dayIndex === ramadanData.length - 1 ? 'last' : 'active'),
+                data: todayData,
+                dayIndex: dayIndex,
+                isBefore: false
+            };
+        }
+
+        // Update countdown timer
+        function updateCountdown() {
+            const now = new Date();
+            const info = getCurrentRamadanInfo();
+            const todayData = info.data;
+            
+            if (!todayData || info.isBefore) {
+                // Countdown to Ramadan start
+                const startDate = new Date('2026-02-19T05:16:00');
+                const diff = startDate - now;
+                if (diff > 0) {
+                    updateCountdownDisplay(diff);
+                    document.getElementById('countdown-label').textContent = 'Until Ramadan Begins';
+                    document.getElementById('fasting-status').textContent = 'Ramadan has not started yet';
+                }
+                return;
+            }
+
+            const sehriTime = parseTime(todayData.date, todayData.sehri);
+            const iftarTime = parseTime(todayData.date, todayData.iftar);
+            
+            let targetTime;
+            let label;
+            
+            if (sehriTime && now < sehriTime) {
+                // Before sehri - countdown to sehri end
+                targetTime = sehriTime;
+                label = 'Until Sehri Ends';
+                document.getElementById('fasting-status').textContent = 'Sehri time - eat before it ends';
+                document.getElementById('fasting-status').parentElement.classList.add('bg-blue-500/20');
+            } else if (iftarTime && now < iftarTime) {
+                // Fasting - countdown to iftar
+                targetTime = iftarTime;
+                label = 'Until Iftar';
+                document.getElementById('fasting-status').textContent = 'Currently fasting';
+                document.getElementById('fasting-status').parentElement.classList.add('bg-gold/20');
+            } else {
+                // After iftar - countdown to tomorrow's sehri or end
+                const tomorrow = ramadanData[info.dayIndex + 1];
+                if (tomorrow && tomorrow.sehri !== '-') {
+                    targetTime = parseTime(tomorrow.date, tomorrow.sehri);
+                    label = 'Until Tomorrow\'s Sehri';
+                    document.getElementById('fasting-status').textContent = 'Iftar completed';
+                } else {
+                    document.getElementById('countdown-label').textContent = 'Ramadan Complete';
+                    document.getElementById('days').textContent = '00';
+                    document.getElementById('hours').textContent = '00';
+                    document.getElementById('minutes').textContent = '00';
+                    document.getElementById('seconds').textContent = '00';
+                    return;
+                }
+            }
+            
+            const diff = targetTime - now;
+            if (diff > 0) {
+                updateCountdownDisplay(diff);
+                document.getElementById('countdown-label').textContent = label;
+            }
+            
+            // Update today's display
+            document.getElementById('today-sehri').textContent = todayData.sehri !== '-' ? todayData.sehri : '--:--';
+            document.getElementById('today-fajr').textContent = todayData.fajr;
+            document.getElementById('today-iftar').textContent = todayData.iftar !== '-' ? todayData.iftar : '--:--';
+            document.getElementById('today-date-display').textContent = new Date().toLocaleDateString('en-US', { 
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+            });
+            
+            // Calculate fasting duration
+            if (todayData.sehri !== '-' && todayData.iftar !== '-') {
+                const duration = calculateDuration(sehriTime, iftarTime);
+                document.getElementById('fasting-duration').textContent = duration;
+            }
+            
+            document.getElementById('ramadan-day').textContent = `Day ${todayData.day} of 30`;
+        }
+
+        function updateCountdownDisplay(diff) {
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        // Render timetable
+        function renderTimetable(filter = 'all') {
+            const tbody = document.getElementById('timetable-body');
+            tbody.innerHTML = '';
+            
+            const now = new Date();
+            const currentDate = now.toISOString().split('T')[0];
+            
+            ramadanData.forEach((day, index) => {
+                const rowDate = new Date(day.date);
+                const isToday = day.date === currentDate;
+                const isPast = rowDate < new Date(currentDate) && !isToday;
+                
+                if (filter === 'past' && !isPast) return;
+                if (filter === 'upcoming' && (isPast || isToday)) return;
+                
+                const tr = document.createElement('tr');
+                tr.className = `hover:bg-white/5 transition-colors ${isToday ? 'bg-gold/10 border-l-4 border-gold' : ''} ${isPast ? 'opacity-50' : ''}`;
+                
+                const sehriTime = parseTime(day.date, day.sehri);
+                const iftarTime = parseTime(day.date, day.iftar);
+                const duration = calculateDuration(sehriTime, iftarTime);
+                
+                let statusBadge = '';
+                if (isToday) {
+                    statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gold text-midnight">Today</span>';
+                } else if (isPast) {
+                    statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-700 text-gray-300">Completed</span>';
+                } else {
+                    statusBadge = '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-900/50 text-blue-300">Upcoming</span>';
+                }
+                
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">${day.day}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-center ${isToday ? 'text-gold font-bold' : 'text-gray-300'}">${day.sehri}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-300">${day.fajr}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-center ${isToday ? 'text-gold font-bold' : 'text-gray-300'}">${day.iftar}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-400 font-mono">${duration}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">${statusBadge}</td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+            
+            // Update progress
+            const completedDays = ramadanData.filter(d => new Date(d.date) < new Date(currentDate)).length;
+            const progress = (completedDays / 30) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = Math.round(progress) + '%';
+        }
+
+        // Filter functionality
+        function filterDays(type) {
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.filter === type) {
+                    btn.classList.remove('glass', 'text-gray-300');
+                    btn.classList.add('bg-gold', 'text-midnight');
+                } else {
+                    btn.classList.add('glass', 'text-gray-300');
+                    btn.classList.remove('bg-gold', 'text-midnight');
+                }
+            });
+            
+            renderTimetable(type);
+        }
+
+        // Initialize
+        createStars();
+        updateCurrentTime(); // Initial call
+        updateCountdown();
+        renderTimetable();
+        
+        // Update every second
+        setInterval(() => {
+            updateCurrentTime();
+            updateCountdown();
+        }, 1000);
+        
+        // Update date at midnight
+        setInterval(() => {
+            const now = new Date();
+            if (now.getHours() === 0 && now.getMinutes() === 0) {
+                renderTimetable();
+            }
+        }, 60000);
+    </script>
+</body>
+</html>
