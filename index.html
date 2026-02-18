@@ -278,7 +278,7 @@
                 Ramadan Mubarak
             </h1>
             <p class="text-xl md:text-2xl text-gray-300/95 mb-12 font-light">
-                Yangzhou 2026 • February 18 - March 20
+                Yangzhou 2026 • February 19 - March 20
             </p>
 
             <!-- Live Countdown -->
@@ -472,9 +472,21 @@
             { date: '2026-03-16', day: 26, sehri: '4:42 AM', fajr: '5:27 AM', iftar: '6:15 PM' },
             { date: '2026-03-17', day: 27, sehri: '4:42 AM', fajr: '5:27 AM', iftar: '6:15 PM' },
             { date: '2026-03-18', day: 28, sehri: '4:42 AM', fajr: '5:27 AM', iftar: '6:15 PM' },
-            { date: '2026-03-19', day: 39, sehri: '4:42 AM', fajr: '5:27 AM', iftar: '6:15 PM' },
+            { date: '2026-03-19', day: 29, sehri: '4:42 AM', fajr: '5:27 AM', iftar: '6:15 PM' },
             { date: '2026-03-20', day: 30, sehri: '4:42 AM', fajr: '5:27 AM', iftar: '6:15 PM' },
         ];
+
+        function dateToKey(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function parseDateKey(dateStr) {
+            const [year, month, day] = dateStr.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        }
 
         // Create stars background
         function createStars() {
@@ -544,7 +556,7 @@
         // Get current Ramadan day info
         function getCurrentRamadanInfo() {
             const now = new Date();
-            const currentDate = now.toISOString().split('T')[0];
+            const currentDate = dateToKey(now);
             
             // Find today's data or nearest day
             let todayData = ramadanData.find(d => d.date === currentDate);
@@ -552,9 +564,9 @@
             
             if (!todayData) {
                 // Find nearest upcoming day
-                dayIndex = ramadanData.findIndex(d => new Date(d.date) > now);
+                dayIndex = ramadanData.findIndex(d => parseDateKey(d.date) > now);
                 if (dayIndex === -1) dayIndex = ramadanData.length - 1;
-                if (dayIndex === 0 && new Date(ramadanData[0].date) > now) {
+                if (dayIndex === 0 && parseDateKey(ramadanData[0].date) > now) {
                     // Before Ramadan starts
                     return { 
                         status: 'upcoming', 
@@ -566,7 +578,7 @@
                 todayData = ramadanData[dayIndex];
             }
             
-            const isPast = new Date(todayData.date) < new Date(currentDate);
+            const isPast = parseDateKey(todayData.date) < parseDateKey(currentDate);
             return { 
                 status: isPast ? 'past' : (dayIndex === ramadanData.length - 1 ? 'last' : 'active'),
                 data: todayData,
@@ -598,19 +610,21 @@
             
             let targetTime;
             let label;
+            const statusPill = document.getElementById('fasting-status').parentElement;
+            statusPill.classList.remove('bg-blue-500/20', 'bg-gold/20');
             
             if (sehriTime && now < sehriTime) {
                 // Before sehri - countdown to sehri end
                 targetTime = sehriTime;
                 label = 'Until Sehri Ends';
                 document.getElementById('fasting-status').textContent = 'Sehri time - eat before it ends';
-                document.getElementById('fasting-status').parentElement.classList.add('bg-blue-500/20');
+                statusPill.classList.add('bg-blue-500/20');
             } else if (iftarTime && now < iftarTime) {
                 // Fasting - countdown to iftar
                 targetTime = iftarTime;
                 label = 'Until Iftar';
                 document.getElementById('fasting-status').textContent = 'Currently fasting';
-                document.getElementById('fasting-status').parentElement.classList.add('bg-gold/20');
+                statusPill.classList.add('bg-gold/20');
             } else {
                 // After iftar - countdown to tomorrow's sehri or end
                 const tomorrow = ramadanData[info.dayIndex + 1];
@@ -669,12 +683,13 @@
             tbody.innerHTML = '';
             
             const now = new Date();
-            const currentDate = now.toISOString().split('T')[0];
+            const currentDate = dateToKey(now);
+            const currentDateValue = parseDateKey(currentDate);
             
             ramadanData.forEach((day, index) => {
-                const rowDate = new Date(day.date);
+                const rowDate = parseDateKey(day.date);
                 const isToday = day.date === currentDate;
-                const isPast = rowDate < new Date(currentDate) && !isToday;
+                const isPast = rowDate < currentDateValue && !isToday;
                 
                 if (filter === 'past' && !isPast) return;
                 if (filter === 'upcoming' && (isPast || isToday)) return;
@@ -709,7 +724,7 @@
             });
             
             // Update progress
-            const completedDays = ramadanData.filter(d => new Date(d.date) < new Date(currentDate)).length;
+            const completedDays = ramadanData.filter(d => parseDateKey(d.date) < currentDateValue).length;
             const progress = (completedDays / 30) * 100;
             document.getElementById('progress-bar').style.width = progress + '%';
             document.getElementById('progress-text').textContent = Math.round(progress) + '%';
